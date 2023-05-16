@@ -1,6 +1,11 @@
-class Heuristics{
-    public class Heuristics
+public class Heuristics
 {
+    GameState state;
+
+    public Heuristics()
+    {
+        state = new GameState();
+    }
     public static int CoinParity(GameState state)
     {
         int score = 0;
