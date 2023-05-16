@@ -2,8 +2,14 @@ using System;
 
 public class GamePlayingAlgorithms
 {
-    GameState state = new GameState();
-    Heuristics heuristics = new Heuristics();
+    GameState state;
+    Heuristics heuristics;
+
+    public GamePlayingAlgorithms()
+    {
+       state = new GameState();
+        heuristics = new Heuristics();
+    }
     public static MoveInfo Minimax(GameState state, int depth)
     {
         if (depth <= 0 || state.GameOver)
