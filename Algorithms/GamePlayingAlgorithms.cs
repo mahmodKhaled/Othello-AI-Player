@@ -7,7 +7,7 @@ public class GamePlayingAlgorithms
 
     public GamePlayingAlgorithms()
     {
-       state = new GameState();
+        state = new GameState();
         heuristics = new Heuristics();
     }
     public static MoveInfo Minimax(GameState state, int depth)
