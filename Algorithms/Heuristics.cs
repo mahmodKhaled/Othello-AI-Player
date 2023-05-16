@@ -1,64 +1,78 @@
 public class Heuristics
 {
-    GameState state;
+    private GameState state;
+    private int currentPlayerCoins;
+    private int opponentCoins;
+    private int coin_parity_score;
+    private int currentPlayerMoves;
+    private int opponentMoves;
+    private int mobility_score;
+    private int currentPlayerCorners;
+    private int opponentCorners;
+    private int corner_score;
+    private int currentPlayerStability;
+    private int opponentStability;
+    private int stability_score;
 
     public Heuristics()
     {
-        state = new GameState();
+        this.state = new GameState();
+        this.currentPlayerCoins = 0;
+        this.opponentCoins = 0;
+        this.coin_parity_score = 0;
+        this.currentPlayerMoves = 0;
+        this.opponentMoves = 0;
+        this.mobility_score = 0;
+        this.currentPlayerCorners = 0;
+        this.opponentCorners = 0;
+        this.corner_score = 0;
+        this.currentPlayerStability = 0;
+        this.opponentStability = 0;
+        this.stability_score = 0;
     }
     public static int CoinParity(GameState state)
     {
-        int score = 0;
-        int currentPlayerCoins = state.DiscCount[state.CurrentPlayer];
-        int opponentCoins = state.DiscCount[state.CurrentPlayer.Opponent()];
+        this.currentPlayerCoins = state.DiscCount[state.CurrentPlayer];
+        this.opponentCoins = state.DiscCount[state.CurrentPlayer.Opponent()];
 
-        score = (100 * (currentPlayerCoins - opponentCoins)) / (currentPlayerCoins + opponentCoins);
+        this.coin_parity_score = (100 * (this.currentPlayerCoins - this.opponentCoins)) / (this.currentPlayerCoins + this.opponentCoins);
 
-        return score;
+        return this.coin_parity_score;
     }
 
     public static int Mobility(GameState state)
     {
-        int score = 0;
-        int currentPlayerMoves = state.LegalMoves.Count;
-        int opponentMoves = 0;
+        this.currentPlayerMoves = state.LegalMoves.Count;
 
         Player opponent = state.CurrentPlayer.Opponent();
         if (state.LegalMoves.ContainsKey(opponent))
-            opponentMoves = state.LegalMoves[opponent].Count;
+            this.opponentMoves = state.LegalMoves[opponent].Count;
 
-        score = (100 * (currentPlayerMoves - opponentMoves)) / (currentPlayerMoves + opponentMoves);
+        this.mobility_score = (100 * (this.currentPlayerMoves - this.opponentMoves)) / (this.currentPlayerMoves + this.opponentMoves);
 
-        return score;
+        return this.mobility_score;
     }
 
     public static int Corner(GameState state)
     {
-        int score = 0;
-        int currentPlayerCorners = 0;
-        int opponentCorners = 0;
-
         // Define the corner positions
         Position[] cornerPositions = { new Position(0, 0), new Position(0, 7), new Position(7, 0), new Position(7, 7) };
 
         foreach (var position in cornerPositions)
         {
             if (state.Board[position.Row, position.Col] == state.CurrentPlayer)
-                currentPlayerCorners++;
+                this.currentPlayerCorners++;
             else if (state.Board[position.Row, position.Col] == state.CurrentPlayer.Opponent())
-                opponentCorners++;
+                this.opponentCorners++;
         }
 
-        score = (100 * (currentPlayerCorners - opponentCorners)) / (currentPlayerCorners + opponentCorners);
+        this.corner_score = (100 * (this.currentPlayerCorners - this.opponentCorners)) / (this.currentPlayerCorners + this.opponentCorners);
 
-        return score;
+        return this.corner_score;
     }
 
     public static int Stability(GameState state)
     {
-        int score = 0;
-        int currentPlayerStability = 0;
-        int opponentStability = 0;
 
         // Define the stable positions
         Position[] stablePositions = {
@@ -82,14 +96,14 @@ public class Heuristics
         foreach (var position in stablePositions)
         {
             if (state.Board[position.Row, position.Col] == state.CurrentPlayer)
-                currentPlayerStability++;
+                this.currentPlayerStability++;
             else if (state.Board[position.Row, position.Col] == state.CurrentPlayer.Opponent())
-                opponentStability++;
+                this.opponentStability++;
         }
 
-        score = (100 * (currentPlayerStability - opponentStability)) / (currentPlayerStability + opponentStability);
+        this.stability_score = (100 * (this.currentPlayerStability - this.opponentStability)) / (this.currentPlayerStability + this.opponentStability);
 
-        return score;
+        return this.stability_score;
     }
 
     public static void Main(){
