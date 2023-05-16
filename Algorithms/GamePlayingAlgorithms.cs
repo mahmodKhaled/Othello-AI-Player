@@ -2,13 +2,21 @@ using System;
 
 public class GamePlayingAlgorithms
 {
-    GameState state;
-    Heuristics heuristics;
+    private GameState state;
+    private Heuristics heuristics;
+    private int coinParityWeight;
+    private int mobilityWeight;
+    private int cornerWeight;
+    private int stabilityWeight;
 
     public GamePlayingAlgorithms()
     {
         state = new GameState();
         heuristics = new Heuristics();
+        coinParityWeight = 1;
+        mobilityWeight = 2;
+        cornerWeight = 3;
+        stabilityWeight = 4;
     }
     public static MoveInfo Minimax(GameState state, int depth)
     {
@@ -130,20 +138,16 @@ public class GamePlayingAlgorithms
 
     private static MoveInfo Evaluate(GameState state)
     {
-        int coinParityWeight = 1;
-        int mobilityWeight = 2;
-        int cornerWeight = 3;
-        int stabilityWeight = 4;
 
         int coinParityScore = heuristics.CoinParity(state);
         int mobilityScore = heuristics.Mobility(state);
         int cornerScore = heuristics.Corner(state);
         int stabilityScore = heuristics.Stability(state);
 
-        int weightedScore = coinParityWeight * coinParityScore +
-                            mobilityWeight * mobilityScore +
-                            cornerWeight * cornerScore +
-                            stabilityWeight * stabilityScore;
+        int weightedScore = this.coinParityWeight * coinParityScore +
+                            this.mobilityWeight * mobilityScore +
+                            this.cornerWeight * cornerScore +
+                            this.stabilityWeight * stabilityScore;
 
         return new MoveInfo { Score = weightedScore };
     }
