@@ -18,7 +18,13 @@ public class GamePlayingAlgorithms
         cornerWeight = 3;
         stabilityWeight = 4;
     }
-    public static MoveInfo Minimax(GameState state, int depth)
+
+    public static MoveInfo MiniMax(GameState state, int depth)
+    {
+        return Minimax(state, depth, true);
+    }
+
+    public static MoveInfo Minimax(GameState state, int depth, bool isMaximizingPlayer)
     {
         if (depth <= 0 || state.GameOver)
         {
@@ -26,17 +32,23 @@ public class GamePlayingAlgorithms
         }
 
         MoveInfo bestMove = null;
-        int bestScore = int.MinValue;
+        int bestScore = isMaximizingPlayer ? int.MinValue : int.MaxValue;
 
         foreach (var move in state.LegalMoves.Keys)
         {
             GameState nextState = CloneState(state);
             if (nextState.MakeMove(move, out MoveInfo moveInfo))
             {
-                MoveInfo opponentMove = Minimax(nextState, depth - 1);
+                MoveInfo opponentMove = Minimax(nextState, depth - 1, !isMaximizingPlayer);
                 int score = -opponentMove.Score;
 
-                if (score > bestScore)
+                if (isMaximizingPlayer && score > bestScore)
+                {
+                    bestScore = score;
+                    bestMove = moveInfo;
+                    bestMove.Score = score;
+                }
+                else if (!isMaximizingPlayer && score < bestScore)
                 {
                     bestScore = score;
                     bestMove = moveInfo;
@@ -47,6 +59,7 @@ public class GamePlayingAlgorithms
 
         return bestMove;
     }
+
 
     public static MoveInfo AlphaBetaPruning(GameState state, int depth)
     {
