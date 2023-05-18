@@ -16,6 +16,7 @@ public class Heuristics
 
     public Heuristics()
     {
+        // Initialize the Heuristics object with default values
         this.state = new GameState();
         this.currentPlayerCoins = 0;
         this.opponentCoins = 0;
@@ -30,20 +31,26 @@ public class Heuristics
         this.opponentStability = 0;
         this.stability_score = 0;
     }
+    // Calculate the coin parity score for the given game state
     public static int CoinParity(GameState state)
     {
+        // Calculate the number of coins for the current player and the opponent
         this.currentPlayerCoins = state.DiscCount[state.CurrentPlayer];
         this.opponentCoins = state.DiscCount[state.CurrentPlayer.Opponent()];
 
+        // Calculate the coin parity score using the formula
         this.coin_parity_score = (100 * (this.currentPlayerCoins - this.opponentCoins)) / (this.currentPlayerCoins + this.opponentCoins);
 
         return this.coin_parity_score;
     }
 
+    // Calculate the mobility score for the given game state
     public static int Mobility(GameState state)
     {
+        // Calculate the number of legal moves for the current player
         this.currentPlayerMoves = state.LegalMoves.Count;
 
+        // Calculate the number of legal moves for the opponent
         Player opponent = state.CurrentPlayer.Opponent();
         if (state.LegalMoves.ContainsKey(opponent))
             this.opponentMoves = state.LegalMoves[opponent].Count;
@@ -53,11 +60,13 @@ public class Heuristics
         return this.mobility_score;
     }
 
+    // Calculate the corner score for the given game state
     public static int Corner(GameState state)
     {
         // Define the corner positions
         Position[] cornerPositions = { new Position(0, 0), new Position(0, 7), new Position(7, 0), new Position(7, 7) };
 
+        // Calculate the number of corners for the current player and the opponent
         foreach (var position in cornerPositions)
         {
             if (state.Board[position.Row, position.Col] == state.CurrentPlayer)
@@ -66,16 +75,19 @@ public class Heuristics
                 this.opponentCorners++;
         }
 
+        // Calculate the corner score using the formula
         this.corner_score = (100 * (this.currentPlayerCorners - this.opponentCorners)) / (this.currentPlayerCorners + this.opponentCorners);
 
         return this.corner_score;
     }
 
+    // Calculate the stability score for the given game state
     public static int Stability(GameState state)
     {
 
         // Define the stable positions
         Position[] stablePositions = {
+            // List of stable positions
             new Position(1, 1), new Position(1, 6), new Position(6, 1), new Position(6, 6),
             new Position(1, 0), new Position(0, 1), new Position(1, 7), new Position(0, 6),
             new Position(7, 1), new Position(6, 0), new Position(6, 7), new Position(7, 6),
@@ -93,6 +105,7 @@ public class Heuristics
             new Position(6, 2), new Position(2, 4), new Position(3, 3), new Position(4, 3)
         };
 
+        // Calculate the number of stable positions for the current player and the opponent
         foreach (var position in stablePositions)
         {
             if (state.Board[position.Row, position.Col] == state.CurrentPlayer)
@@ -101,6 +114,7 @@ public class Heuristics
                 this.opponentStability++;
         }
 
+        // Calculate the stability score using the formula
         this.stability_score = (100 * (this.currentPlayerStability - this.opponentStability)) / (this.currentPlayerStability + this.opponentStability);
 
         return this.stability_score;
