@@ -47,14 +47,18 @@ public class Heuristics
     // Calculate the mobility score for the given game state
     public int Mobility(GameState state)
     {
+        // Find the legal moves for the current player
+        Dictionary<Position, List<Position>> legalMoves = state.FindLegalMoves(state.CurrentPlayer);
+
         // Calculate the number of legal moves for the current player
-        this.currentPlayerMoves = state.LegalMoves.Count;
+        currentPlayerMoves = legalMoves.Count;
 
         // Calculate the number of legal moves for the opponent
         Player opponent = state.CurrentPlayer.Opponent();
-        if (state.LegalMoves.ContainsKey(opponent))
-            this.opponentMoves = state.LegalMoves[opponent].Count;
+        Dictionary<Position, List<Position>> opponentLegalMoves = state.FindLegalMoves(opponent);
+        opponentMoves = opponentLegalMoves.Count;
 
+        // Calculate the mobility score using the formula
         this.mobility_score = (100 * (this.currentPlayerMoves - this.opponentMoves)) / (this.currentPlayerMoves + this.opponentMoves);
 
         return this.mobility_score;
