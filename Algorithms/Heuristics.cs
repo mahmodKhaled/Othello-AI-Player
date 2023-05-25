@@ -1,18 +1,18 @@
 public class Heuristics
 {
-    private GameState state;
-    private int currentPlayerCoins;
-    private int opponentCoins;
-    private int coin_parity_score;
-    private int currentPlayerMoves;
-    private int opponentMoves;
-    private int mobility_score;
-    private int currentPlayerCorners;
-    private int opponentCorners;
-    private int corner_score;
-    private int currentPlayerStability;
-    private int opponentStability;
-    private int stability_score;
+    private static GameState state;
+    private static int currentPlayerCoins;
+    private static int opponentCoins;
+    private static int coin_parity_score;
+    private static int currentPlayerMoves;
+    private static int opponentMoves;
+    private static int mobility_score;
+    private static int currentPlayerCorners;
+    private static int opponentCorners;
+    private static int corner_score;
+    private static int currentPlayerStability;
+    private static int opponentStability;
+    private static int stability_score;
 
     public Heuristics()
     {

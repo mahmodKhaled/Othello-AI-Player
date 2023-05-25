@@ -2,12 +2,12 @@ using System;
 
 public class GamePlayingAlgorithms
 {
-    private GameState state;
-    private Heuristics heuristics;
-    private int coinParityWeight;
-    private int mobilityWeight;
-    private int cornerWeight;
-    private int stabilityWeight;
+    private static GameState state;
+    private static Heuristics heuristics;
+    private static int coinParityWeight;
+    private static int mobilityWeight;
+    private static int cornerWeight;
+    private static int stabilityWeight;
 
     public GamePlayingAlgorithms()
     {
