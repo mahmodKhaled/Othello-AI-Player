@@ -1,18 +1,18 @@
 public class Heuristics
 {
-    private static GameState state;
-    private static int currentPlayerCoins;
-    private static int opponentCoins;
-    private static int coin_parity_score;
-    private static int currentPlayerMoves;
-    private static int opponentMoves;
-    private static int mobility_score;
-    private static int currentPlayerCorners;
-    private static int opponentCorners;
-    private static int corner_score;
-    private static int currentPlayerStability;
-    private static int opponentStability;
-    private static int stability_score;
+    private GameState state;
+    private int currentPlayerCoins;
+    private int opponentCoins;
+    private int coin_parity_score;
+    private int currentPlayerMoves;
+    private int opponentMoves;
+    private int mobility_score;
+    private int currentPlayerCorners;
+    private int opponentCorners;
+    private int corner_score;
+    private int currentPlayerStability;
+    private int opponentStability;
+    private int stability_score;
 
     public Heuristics()
     {
@@ -32,7 +32,7 @@ public class Heuristics
         this.stability_score = 0;
     }
     // Calculate the coin parity score for the given game state
-    public static int CoinParity(GameState state)
+    public int CoinParity(GameState state)
     {
         // Calculate the number of coins for the current player and the opponent
         this.currentPlayerCoins = state.DiscCount[state.CurrentPlayer];
@@ -45,7 +45,7 @@ public class Heuristics
     }
 
     // Calculate the mobility score for the given game state
-    public static int Mobility(GameState state)
+    public int Mobility(GameState state)
     {
         // Calculate the number of legal moves for the current player
         this.currentPlayerMoves = state.LegalMoves.Count;
@@ -61,7 +61,7 @@ public class Heuristics
     }
 
     // Calculate the corner score for the given game state
-    public static int Corner(GameState state)
+    public int Corner(GameState state)
     {
         // Define the corner positions
         Position[] cornerPositions = { new Position(0, 0), new Position(0, 7), new Position(7, 0), new Position(7, 7) };
@@ -82,7 +82,7 @@ public class Heuristics
     }
 
     // Calculate the stability score for the given game state
-    public static int Stability(GameState state)
+    public int Stability(GameState state)
     {
 
         // Define the stable positions
@@ -118,13 +118,5 @@ public class Heuristics
         this.stability_score = (100 * (this.currentPlayerStability - this.opponentStability)) / (this.currentPlayerStability + this.opponentStability);
 
         return this.stability_score;
-    }
-
-    public static void Main(){
-        // Coin Parity
-        // Mobility
-        // Corner
-        // Stability
-
     }
 }
