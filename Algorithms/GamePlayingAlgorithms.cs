@@ -2,12 +2,12 @@ using System;
 
 public class GamePlayingAlgorithms
 {
-    private static GameState state;
-    private static Heuristics heuristics;
-    private static int coinParityWeight;
-    private static int mobilityWeight;
-    private static int cornerWeight;
-    private static int stabilityWeight;
+    private GameState state;
+    private Heuristics heuristics;
+    private int coinParityWeight;
+    private int mobilityWeight;
+    private int cornerWeight;
+    private int stabilityWeight;
 
     public GamePlayingAlgorithms()
     {
@@ -21,13 +21,13 @@ public class GamePlayingAlgorithms
     }
 
     // Perform the MiniMax algorithm to determine the best move for the current player
-    public static MoveInfo MiniMax(GameState state, int depth)
+    public MoveInfo MiniMax(GameState state, int depth)
     {
         return Minimax(state, depth, true);
     }
 
     // Recursive function for MiniMax algorithm
-    public static MoveInfo Minimax(GameState state, int depth, bool isMaximizingPlayer)
+    public MoveInfo Minimax(GameState state, int depth, bool isMaximizingPlayer)
     {
         // Base case: return the evaluated score if depth limit is reached or game is over
         if (depth <= 0 || state.GameOver)
@@ -70,13 +70,13 @@ public class GamePlayingAlgorithms
     }
 
     // Perform the Alpha-Beta Pruning algorithm to determine the best move for the current player
-    public static MoveInfo AlphaBetaPruning(GameState state, int depth)
+    public MoveInfo AlphaBetaPruning(GameState state, int depth)
     {
         return AlphaBetaPruning(state, depth, int.MinValue, int.MaxValue, true);
     }
 
     // Recursive function for Alpha-Beta Pruning algorithm
-    private static MoveInfo AlphaBetaPruning(GameState state, int depth, int alpha, int beta, bool maximizingPlayer)
+    private MoveInfo AlphaBetaPruning(GameState state, int depth, int alpha, int beta, bool maximizingPlayer)
     {
         // Base case: return the evaluated score if depth limit is reached or game is over
         if (depth <= 0 || state.GameOver)
@@ -156,7 +156,7 @@ public class GamePlayingAlgorithms
     }
 
     // Perform the Alpha-Beta Pruning algorithm with iterative deepening to determine the best move for the current player
-    public static MoveInfo AlphaBetaPruningWithIterativeDeepening(GameState state, int maxDepth)
+    public MoveInfo AlphaBetaPruningWithIterativeDeepening(GameState state, int maxDepth)
     {
         // Initialization
         MoveInfo bestMove = null;
@@ -175,7 +175,7 @@ public class GamePlayingAlgorithms
     }
 
     // Evaluate the given game state using the heuristics and weights
-    private static MoveInfo Evaluate(GameState state)
+    private MoveInfo Evaluate(GameState state)
     {
         // Calculate individual heuristic scores
         int coinParityScore = heuristics.CoinParity(state);
@@ -193,7 +193,7 @@ public class GamePlayingAlgorithms
     }
 
     // Create a deep copy of the given game state
-    private static GameState CloneState(GameState state)
+    private GameState CloneState(GameState state)
     {
         // Create a deep copy of the GameState object to avoid modifying the original state.
         GameState clone = new GameState();
@@ -205,13 +205,6 @@ public class GamePlayingAlgorithms
         clone.Winner = state.Winner;
         clone.LegalMoves = new Dictionary<Position, List<Position>>(state.LegalMoves);
         return clone;
-    }
-
-    public static void Main(){
-        // MiniMax
-        // AlphaBetaPruning
-        // AlphaBetaPruningWithIterativeDeepening
-
     }
 }
         
