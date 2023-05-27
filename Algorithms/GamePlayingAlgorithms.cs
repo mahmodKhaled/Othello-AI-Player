@@ -30,7 +30,7 @@ public class GamePlayingAlgorithms
     public MoveInfo Minimax(GameState state, int depth, bool isMaximizingPlayer)
     {
         // Base case: return the evaluated score if depth limit is reached or game is over
-        if (depth <= 0 || state.GameOver || state.LegalMoves.Count == 0)
+        if (depth <= 0 || state.LegalMoves.Count == 0)
         {
             return Evaluate(state);
         }
@@ -79,7 +79,7 @@ public class GamePlayingAlgorithms
     private MoveInfo AlphaBetaPruning(GameState state, int depth, int alpha, int beta, bool maximizingPlayer)
     {
         // Base case: return the evaluated score if depth limit is reached or game is over
-        if (depth <= 0 || state.GameOver || state.LegalMoves.Count == 0)
+        if (depth <= 0 || state.LegalMoves.Count == 0)
         {
             return Evaluate(state);
         }
@@ -177,6 +177,10 @@ public class GamePlayingAlgorithms
     // Evaluate the given game state using the heuristics and weights
     private MoveInfo Evaluate(GameState state)
     {
+        // Return the maximum score if the game is over in the final position in Board
+        if(state.GameOver == true){
+            return new MoveInfo { Score = int.MaxValue };
+        }
         // Calculate individual heuristic scores
         int coinParityScore = heuristics.CoinParity(state);
         int mobilityScore = heuristics.Mobility(state);
