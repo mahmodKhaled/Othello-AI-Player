@@ -79,9 +79,18 @@ public class Heuristics
                 this.opponentCorners++;
         }
 
-        // Calculate the corner score using the formula
-        this.corner_score = (100 * (this.currentPlayerCorners - this.opponentCorners)) / (this.currentPlayerCorners + this.opponentCorners);
+        try{
+            // Calculate the corner score using the formula
+            this.corner_score = (100 * (this.currentPlayerCorners - this.opponentCorners)) / (this.currentPlayerCorners + this.opponentCorners);
 
+        }
+        catch (DivideByZeroException)
+        {
+            // Handle the division by zero exception
+            // Return a default value or handle the situation accordingly
+            this.corner_score = 0;
+        }
+        
         return this.corner_score;
     }
 
