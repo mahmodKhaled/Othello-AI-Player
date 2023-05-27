@@ -30,7 +30,7 @@ public class GamePlayingAlgorithms
     public MoveInfo Minimax(GameState state, int depth, bool isMaximizingPlayer)
     {
         // Base case: return the evaluated score if depth limit is reached or game is over
-        if (depth <= 0 || state.GameOver)
+        if (depth <= 0 || state.GameOver || state.LegalMoves.Count == 0)
         {
             return Evaluate(state);
         }
@@ -79,7 +79,7 @@ public class GamePlayingAlgorithms
     private MoveInfo AlphaBetaPruning(GameState state, int depth, int alpha, int beta, bool maximizingPlayer)
     {
         // Base case: return the evaluated score if depth limit is reached or game is over
-        if (depth <= 0 || state.GameOver)
+        if (depth <= 0 || state.GameOver || state.LegalMoves.Count == 0)
         {
             return Evaluate(state);
         }
