@@ -28,6 +28,12 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> highlights = new List<GameObject>();
 
+    private GamePlayingAlgorithms game_algo = new GamePlayingAlgorithms();
+
+    int black_current_score, white_current_score;
+
+    int turnEndFlag = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,19 +48,68 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if(Input.GetMouseButtonDown(0))
+        if (DifficultyMode.gameMode == GameModes.MultiPlayer)
         {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
-            if(Physics.Raycast(ray, out RaycastHit hitInfo))
+            if (Input.GetMouseButtonDown(0))
             {
-                Vector3 impact = hitInfo.point;
-                Position boardPos = SceneToBoardPos(impact);
-                OnboardClicked(boardPos);
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out RaycastHit hitInfo))
+                {
+                    Vector3 impact = hitInfo.point;
+                    Position boardPos = SceneToBoardPos(impact);
+                    OnboardClicked(boardPos);
+                }
             }
         }
-
+        else if (DifficultyMode.gameMode == GameModes.SinglePlayerEasy)
+        {
+            GamePlayVsPC(1);
+        }
+        else if (DifficultyMode.gameMode == GameModes.SinglePlayerMedium)
+        {
+            GamePlayVsPC(2);
+        }
+        else if (DifficultyMode.gameMode == GameModes.SinglePlayerHard)
+        {
+            GamePlayVsPC(3);
+        }
+        else if (DifficultyMode.gameMode == GameModes.EasyPCEasyPC)
+        {
+            GamePlayPCvsPC(1, 1);
+        }
+        else if (DifficultyMode.gameMode == GameModes.EasyPCMediumPC)
+        {
+            GamePlayPCvsPC(1, 2);
+        }
+        else if (DifficultyMode.gameMode == GameModes.EasyPCHardPC)
+        {
+            GamePlayPCvsPC(1, 3);
+        }
+        else if (DifficultyMode.gameMode == GameModes.MediumPCEasyPC)
+        {
+            GamePlayPCvsPC(2, 1);
+        }
+        else if (DifficultyMode.gameMode == GameModes.MediumPCMediumPC)
+        {
+            GamePlayPCvsPC(2, 2);
+        }
+        else if (DifficultyMode.gameMode == GameModes.MediumPCHardPC)
+        {
+            GamePlayPCvsPC(2, 3);
+        }
+        else if (DifficultyMode.gameMode == GameModes.HardPCEasyPC)
+        {
+            GamePlayPCvsPC(3, 1);
+        }
+        else if (DifficultyMode.gameMode == GameModes.HardPCMediumPC)
+        {
+            GamePlayPCvsPC(3, 2);
+        }
+        else if (DifficultyMode.gameMode == GameModes.HardPCHardPC)
+        {
+            GamePlayPCvsPC(3, 3);
+        }
     }
 
 
@@ -75,9 +130,12 @@ public class GameManager : MonoBehaviour
         highlights.Clear();
     }
 
+
     private void OnboardClicked(Position boardPos)
     {
-        if(gameState.MakeMove(boardPos, out MoveInfo moveInfo))
+        turnEndFlag = 2;
+
+        if (gameState.MakeMove(boardPos, out MoveInfo moveInfo))
         {
             StartCoroutine(OnMoveMade(moveInfo));
         }
@@ -88,9 +146,20 @@ public class GameManager : MonoBehaviour
     {
         HideLegalMoves();
         yield return ShowMove(moveInfo);
+
         yield return ShowTurnOutcome(moveInfo);
         ShowLegalMoves();
+
+        if (gameState.CurrentPlayer == Player.White)
+        {
+            turnEndFlag = 1;
+        }
+        else if (gameState.CurrentPlayer == Player.Black)
+        {
+            turnEndFlag = 0;
+        }
     }
+
 
     private Position SceneToBoardPos(Vector3 scenePos)
     {
@@ -113,11 +182,16 @@ public class GameManager : MonoBehaviour
 
     private void AddStartDiscs()
     {
+        black_current_score = 2;
+        white_current_score = 2;
+
         foreach (Position boardPos in gameState.OccupiedPositions())
         {
             Player player = gameState.Board[boardPos.Row, boardPos.Col];
             SpawnDisc(discPrefabs[player], boardPos);
         }
+        uiManager.SetBlackScoreText(black_current_score);
+        uiManager.SetWhiteScoreText(white_current_score);
     }
     
 
@@ -126,7 +200,23 @@ public class GameManager : MonoBehaviour
         foreach (Position boardPos in positions)
         {
             discs[boardPos.Row, boardPos.Col].Flip();
+
+            Player player = gameState.Board[boardPos.Row, boardPos.Col];
+
+            if (player == Player.Black)
+            {
+                black_current_score++;
+                white_current_score--;
+            }
+            else if (player == Player.White)
+            {
+                white_current_score++;
+                black_current_score--;
+            }
         }
+
+        uiManager.SetBlackScoreText(black_current_score);
+        uiManager.SetWhiteScoreText(white_current_score);
     }
 
 
@@ -134,6 +224,16 @@ public class GameManager : MonoBehaviour
     {
         SpawnDisc(discPrefabs[moveInfo.Player], moveInfo.Position);
         yield return new WaitForSeconds(0.33f);
+
+        if (moveInfo.Player == Player.Black)
+        {
+            black_current_score++;
+        }
+        else
+        {
+            white_current_score++;
+        }
+
         FlibDiscs(moveInfo.Outflanked);
         yield return new WaitForSeconds(0.83f);
     }
@@ -151,10 +251,8 @@ public class GameManager : MonoBehaviour
         uiManager.SetTopText("Neither Player Can Move");
         yield return uiManager.AnimateTopText();
 
-        yield return uiManager.ShowScoreText();
+        yield return uiManager.HideTopText();
         yield return new WaitForSeconds(0.5f);
-
-        yield return ShowCounting();
 
         uiManager.SetWinnerText(winner);
         yield return uiManager.ShowEndScreen();
@@ -181,31 +279,6 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private IEnumerator ShowCounting()
-    {
-        int black = 0, white = 0;
-
-        foreach(Position pos in gameState.OccupiedPositions())
-        {
-            Player player = gameState.Board[pos.Row, pos.Col];
-
-            if (player == Player.Black)
-            {
-                black++;
-                uiManager.SetBlackScoreText(black);
-            }
-            else
-            {
-                white++;
-                uiManager.SetWhiteScoreText(white);
-            }
-
-            discs[pos.Row, pos.Col].Twitch();
-            yield return new WaitForSeconds(0.05f);
-        }
-    }
-
-
     private IEnumerator RestartGame()
     {
         yield return uiManager.HideEndScreen();
@@ -219,10 +292,97 @@ public class GameManager : MonoBehaviour
         StartCoroutine(RestartGame());
     }
 
+    public void OnRestartClicked()
+    {
+        SceneManager.LoadScene(1);
+    }
+
 
     public void BackToMainMenu()
     {
         SceneManager.LoadScene(0);
+    }
+
+    
+    private IEnumerator DelayInSeconds(float delay)
+    {
+        yield return new WaitForSecondsRealtime(delay);
+    }
+
+
+    void GamePlayPCvsPC(int firstPlayerDifficulty, int secondPlayerDifficulty)
+    {
+        MoveInfo tempMoveInfo;
+
+        if (turnEndFlag == 0)
+        {
+            StartCoroutine(DelayInSeconds(3));
+
+            List<Position> legalPositionsPC1 = new List<Position>(this.gameState.LegalMoves.Keys);
+
+            if(legalPositionsPC1.Count == 1)
+            {
+                OnboardClicked(legalPositionsPC1[0]);
+            }
+            else
+            {
+                tempMoveInfo = game_algo.AlphaBetaPruning(gameState, firstPlayerDifficulty);
+
+                OnboardClicked(tempMoveInfo.Position);
+            }
+            
+        }
+        else if (turnEndFlag == 1)
+        {
+            StartCoroutine(DelayInSeconds(3));
+
+            List<Position> legalPositionsPC2 = new List<Position>(this.gameState.LegalMoves.Keys);
+
+            if (legalPositionsPC2.Count == 1)
+            {
+                OnboardClicked(legalPositionsPC2[0]);
+            }
+            else
+            {
+                tempMoveInfo = game_algo.AlphaBetaPruning(gameState, secondPlayerDifficulty);
+
+                OnboardClicked(tempMoveInfo.Position);
+            }
+        }
+    }
+
+
+    void GamePlayVsPC(int PCdifficulty)
+    {
+        if (Input.GetMouseButtonDown(0) && turnEndFlag == 0)
+        {
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hitInfo))
+            {
+                Vector3 impact = hitInfo.point;
+                Position boardPos = SceneToBoardPos(impact);
+                OnboardClicked(boardPos);
+            }
+        }
+        else if (turnEndFlag == 1)
+        {
+            StartCoroutine(DelayInSeconds(3));
+
+            List<Position> legalPositionsPC = new List<Position>(this.gameState.LegalMoves.Keys);
+
+            if (legalPositionsPC.Count == 1)
+            {
+                OnboardClicked(legalPositionsPC[0]);
+            }
+            else
+            {
+                MoveInfo tempMoveInfo = game_algo.AlphaBetaPruning(gameState, PCdifficulty);
+
+                OnboardClicked(tempMoveInfo.Position);
+            }
+  
+        }
     }
 
 }
