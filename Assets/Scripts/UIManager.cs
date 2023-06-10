@@ -24,6 +24,15 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private RectTransform playAgainButton;
 
+    [SerializeField]
+    private RectTransform restartButton;
+
+    [SerializeField]
+    private RectTransform quitInGameButton;
+
+    [SerializeField]
+    private RectTransform quitAfterGameButton;
+
     public void SetPlayerText(Player currentPlayer)
     {
         if (currentPlayer == Player.Black)
@@ -79,21 +88,21 @@ public class UIManager : MonoBehaviour
     }
 
 
-    public IEnumerator ShowScoreText()
+    public IEnumerator HideTopText()
     {
         yield return ScaleDown(topText.rectTransform);
-        yield return ScaleUp(blackScoreText.rectTransform);
-        yield return ScaleUp(whiteScoreText.rectTransform);
     }
 
 
     public void SetBlackScoreText(int score)
     {
+        StartCoroutine(ScaleUp(blackScoreText.rectTransform));
         blackScoreText.text = $"<sprite name=DiscBlackUp> {score}";
     }
 
     public void SetWhiteScoreText(int score)
     {
+        StartCoroutine(ScaleUp(whiteScoreText.rectTransform));
         whiteScoreText.text = $"<sprite name=DiscWhiteUp> {score}";
     }
 
@@ -113,10 +122,11 @@ public class UIManager : MonoBehaviour
     }
 
 
-    private IEnumerator MoveScoreDown()
+    private IEnumerator MoveScore()
     {
-        blackScoreText.rectTransform.LeanMoveY(0, 0.5f);
-        whiteScoreText.rectTransform.LeanMoveY(0, 0.5f);
+        blackScoreText.rectTransform.LeanMoveX(-150f, 0.5f);
+        whiteScoreText.rectTransform.LeanMoveX(150f, 0.5f);
+
         yield return new WaitForSeconds(0.5f);
     }
 
@@ -144,20 +154,30 @@ public class UIManager : MonoBehaviour
     public IEnumerator ShowEndScreen()
     {
         yield return ShowOverlay();
-        yield return MoveScoreDown();
+        yield return MoveScore();
+
+        yield return ScaleDown(restartButton);
+        yield return ScaleDown(quitInGameButton);
+
         yield return ScaleUp(winnerText.rectTransform);
         yield return ScaleUp(playAgainButton);
+        yield return ScaleUp(quitAfterGameButton);
     }
 
-
+    
     public IEnumerator HideEndScreen()
     {
         StartCoroutine(ScaleDown(winnerText.rectTransform));
         StartCoroutine(ScaleDown(blackScoreText.rectTransform));
         StartCoroutine(ScaleDown(whiteScoreText.rectTransform));
         StartCoroutine(ScaleDown(playAgainButton));
+        StartCoroutine(ScaleDown(quitAfterGameButton));
+
+        StartCoroutine(ScaleUp(restartButton));
+        StartCoroutine(ScaleUp(quitInGameButton));
 
         yield return new WaitForSeconds(0.5f);
         yield return HideOverlay();
     }
+
 }
