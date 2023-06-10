@@ -4,12 +4,12 @@ public class GameState
 {
    public const int Rows=8;
    public const int Cols=8;
-   public Player[,] Board {get;}
-   public Dictionary<Player,int> DiscCount {get;}
-   public Player CurrentPlayer {get;private set;}
-   public bool GameOver {get;private set;}
-   public Player Winner {get;private set;}
-   public Dictionary<Position,List<Position>> LegalMoves {get;private set;}
+   public Player[,] Board { get; set; }
+   public Dictionary<Player,int> DiscCount { get; set; }
+   public Player CurrentPlayer {get; set;}
+   public bool GameOver {get; set;}
+   public Player Winner {get; set;}
+   public Dictionary<Position,List<Position>> LegalMoves {get; set;}
    public GameState()
 {
     // Initialize the game board as a 2D array of Player objects
@@ -240,7 +240,7 @@ private bool IsMoveLegal(Player player, Position pos, out List<Position> outflan
     return outflanked.Count > 0;
 }
 
-private Dictionary<Position, List<Position>> FindLegalMoves(Player player)
+public Dictionary<Position, List<Position>> FindLegalMoves(Player player)
 {
     // Create a new dictionary to store the legal moves and their corresponding outflanked positions
     Dictionary<Position, List<Position>> legalMoves = new Dictionary<Position, List<Position>>();
