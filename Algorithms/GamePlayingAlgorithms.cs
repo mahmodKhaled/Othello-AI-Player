@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using System;
 
 public class GamePlayingAlgorithms
@@ -37,6 +40,7 @@ public class GamePlayingAlgorithms
 
         // Initialization
         MoveInfo bestMove = null;
+        MoveInfo lastMove = null;
         int bestScore = isMaximizingPlayer ? int.MinValue : int.MaxValue;
 
         // Iterate through all legal moves
@@ -49,6 +53,8 @@ public class GamePlayingAlgorithms
                 // Recursively call Minimax on the next state
                 MoveInfo opponentMove = Minimax(nextState, depth - 1, !isMaximizingPlayer);
                 int score = -opponentMove.Score;
+
+                lastMove = moveInfo;
 
                 // Update the best move and score based on the maximizing or minimizing player
                 if (isMaximizingPlayer && score > bestScore)
@@ -65,8 +71,15 @@ public class GamePlayingAlgorithms
                 }
             }
         }
+        if (bestMove == null)
+        {
+            return lastMove;
+        }
+        else
+        {
+            return bestMove;
+        }
 
-        return bestMove;
     }
 
     // Perform the Alpha-Beta Pruning algorithm to determine the best move for the current player
@@ -86,6 +99,7 @@ public class GamePlayingAlgorithms
 
         // Initialization
         MoveInfo bestMove = null;
+        MoveInfo lastMove = null;
 
         if (maximizingPlayer)
         {
@@ -101,6 +115,7 @@ public class GamePlayingAlgorithms
                     // Recursively call AlphaBetaPruning on the next state
                     MoveInfo opponentMove = AlphaBetaPruning(nextState, depth - 1, alpha, beta, false);
                     int score = -opponentMove.Score;
+                    lastMove = moveInfo;
 
                     // Update the best move and score
                     if (score > bestScore)
@@ -133,6 +148,7 @@ public class GamePlayingAlgorithms
                     // Recursively call AlphaBetaPruning on the next state
                     MoveInfo opponentMove = AlphaBetaPruning(nextState, depth - 1, alpha, beta, true);
                     int score = -opponentMove.Score;
+                    lastMove = moveInfo;
 
                     // Update the best move and score
                     if (score < bestScore)
@@ -152,7 +168,14 @@ public class GamePlayingAlgorithms
             }
         }
 
-        return bestMove;
+        if (bestMove == null)
+        {
+            return lastMove;
+        }
+        else
+        {
+            return bestMove;
+        }
     }
 
     // Perform the Alpha-Beta Pruning algorithm with iterative deepening to determine the best move for the current player
@@ -177,10 +200,12 @@ public class GamePlayingAlgorithms
     // Evaluate the given game state using the heuristics and weights
     private MoveInfo Evaluate(GameState state)
     {
-        // Return the maximum score if the game is over in the final position in Board
-        if(state.GameOver == true){
+		// Return the maximum score if the game is over in the final position in Board
+        if (state.GameOver)
+        {
             return new MoveInfo { Score = int.MaxValue };
         }
+
         // Calculate individual heuristic scores
         int coinParityScore = heuristics.CoinParity(state);
         int mobilityScore = heuristics.Mobility(state);
@@ -211,4 +236,3 @@ public class GamePlayingAlgorithms
         return clone;
     }
 }
-        

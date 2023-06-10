@@ -1,3 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System;
+
 public class Heuristics
 {
     private GameState state;
@@ -79,7 +84,8 @@ public class Heuristics
                 this.opponentCorners++;
         }
 
-        try{
+        try
+        {
             // Calculate the corner score using the formula
             this.corner_score = (100 * (this.currentPlayerCorners - this.opponentCorners)) / (this.currentPlayerCorners + this.opponentCorners);
 
@@ -90,7 +96,7 @@ public class Heuristics
             // Return a default value or handle the situation accordingly
             this.corner_score = 0;
         }
-        
+
         return this.corner_score;
     }
 
