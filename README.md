@@ -63,7 +63,7 @@ To begin your journey with the OthelloAI project, you have two options to get st
 ### Option 1: Play the Game Exe
 
 1. Clone the repository to your local machine.
-2. Navigate to the "Game Exe" folder within the repository.
+2. Navigate to the "Game EXE" folder within the repository.
 3. Run the provided executable file to launch the Othello game.
 4. Enjoy playing Othello against the AI directly without any additional setup or configuration.
 
