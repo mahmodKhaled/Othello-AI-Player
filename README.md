@@ -1,14 +1,19 @@
+<center>
+
 # Othello-AI-Player
+
+</center>
 
 <center>Welcome to the OthelloAI project! In this project, we aim to explore the fascinating world of game playing using search algorithms and heuristics specifically designed for the game of Othello. Othello, also known as Reversi, is a two-player strategy game played on an 8x8 board, where each player controls pieces that are either black or white. The objective of the game is to have the majority of your colored pieces on the board when the game ends.</center>
 
+<br>
 <div align="center">
 
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/mahmodKhaled/Othello-AI-Player/main)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mahmodKhaled/Othello-AI-Player)
 ![GitHub contributors](https://img.shields.io/github/contributors/mahmodKhaled/Othello-AI-Player)
 ![Lines of code](https://img.shields.io/tokei/lines/github/mahmodKhaled/Othello-AI-Player)
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 </div>
 
 ## Project Overview 
