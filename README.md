@@ -1,14 +1,23 @@
 # Othello-AI-Player
 
-Welcome to the OthelloAI project! In this project, we aim to explore the fascinating world of game playing using search algorithms and heuristics specifically designed for the game of Othello. Othello, also known as Reversi, is a two-player strategy game played on an 8x8 board, where each player controls pieces that are either black or white. The objective of the game is to have the majority of your colored pieces on the board when the game ends.
+<center>Welcome to the OthelloAI project! In this project, we aim to explore the fascinating world of game playing using search algorithms and heuristics specifically designed for the game of Othello. Othello, also known as Reversi, is a two-player strategy game played on an 8x8 board, where each player controls pieces that are either black or white. The objective of the game is to have the majority of your colored pieces on the board when the game ends.</center>
 
-## Project Overview
+<div align="center">
+
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/mahmodKhaled/Othello-AI-Player/main)
+![GitHub repo size](https://img.shields.io/github/repo-size/mahmodKhaled/Othello-AI-Player)
+![GitHub contributors](https://img.shields.io/github/contributors/mahmodKhaled/Othello-AI-Player)
+![Lines of code](https://img.shields.io/tokei/lines/github/mahmodKhaled/Othello-AI-Player)
+
+</div>
+
+## Project Overview 
 
 The main objective of this project is to develop an intelligent Othello AI player capable of making strategic decisions and playing at a high level. By utilizing search algorithms and heuristics, our AI will analyze the game state, search through possible moves, and determine the best move to make at any given moment. This will allow the AI to exhibit strong gameplay and compete against human players or other AI opponents.
 
-## Main Features
+## Main Features 🚀
 
-### Seach Algorithms
+### Seach Algorithms :mag_right:
 
 We will employ several search algorithms to explore and evaluate the game tree effectively:
 
@@ -18,7 +27,7 @@ We will employ several search algorithms to explore and evaluate the game tree e
 
 - **Alpha-Beta Pruning with Iterative Deepening**: This algorithm combines the benefits of alpha-beta pruning with iterative deepening. It gradually increases the depth of the search tree until timing constraints are violated, allowing for a more precise evaluation of different move sequences and optimizing the AI's decision-making process.
 
-### Heuristics
+### Heuristics :chart_with_upwards_trend:
 
 Heuristics play a crucial role in evaluating the game state and estimating the desirability of different moves. We will employ a combination of heuristics to capture important aspects of the game and guide the AI's decision-making process. Some of the heuristics we will utilize include:
 
@@ -32,7 +41,7 @@ Heuristics play a crucial role in evaluating the game state and estimating the d
 
 These heuristics will be combined and weighted to create an overall evaluation function that quantifies the desirability of different game states and moves. We will continuously refine and optimize these heuristics throughout the development process to improve the AI's gameplay and decision-making capabilities.
 
-### Gameplay Modes
+### Gameplay Modes :video_game:
 
 Our AI player will accommodate different gameplay modes, including:
 
@@ -52,7 +61,7 @@ For AI gameplay, we offer three difficulty levels:
 
 With these varied gameplay modes and difficulty levels, the OthelloAI project offers a customizable and enjoyable experience for players of all skill levels.
 
-### Graphical User Interface(GUI)
+### Graphical User Interface(GUI) :computer:
 
 - We will create a user-friendly GUI that enables human players to interact with the Othello AI. The GUI will feature a game board display, move input functionality for human players, game status information (score, current turn, game over), and game options to select different modes and difficulty levels.
 
@@ -60,14 +69,14 @@ With these varied gameplay modes and difficulty levels, the OthelloAI project of
 
 To begin your journey with the OthelloAI project, you have two options to get started:
 
-### Option 1: Play the Game Exe
+### Option 1: Play the Game Exe 🎮
 
 1. Clone the repository to your local machine.
 2. Navigate to the "Game EXE" folder within the repository.
 3. Run the provided executable file to launch the Othello game.
 4. Enjoy playing Othello against the AI directly without any additional setup or configuration.
 
-### Option 2: Integrate the Project with Unity
+### Option 2: Integrate the Project with Unity :video_game:
 
 1. Clone the repository to your local machine.
 2. Locate the C# project files in the repository.
@@ -78,6 +87,6 @@ To begin your journey with the OthelloAI project, you have two options to get st
 
 Choose the option that best suits your needs and preferences. Whether you prefer to play the game as an executable or integrate the project into Unity for further customization, we hope you have an enjoyable experience playing Othello against our AI player.
 
-## License
+## License :scroll:
 
 This project is licensed under the <ins>**MIT License**</ins>. Feel free to use, modify, and distribute the code according to the terms of the license.
